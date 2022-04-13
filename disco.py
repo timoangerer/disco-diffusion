@@ -340,11 +340,13 @@ Setting | Description | Default
 """
 # 1. Set Up
 """
-
-from omegaconf import DictConfig, OmegaConf
 import hydra
 @hydra.main(config_path="config", config_name="defaults")
 def main(cfg):
+  from omegaconf import DictConfig, OmegaConf
+
+  print("Configuration being used:")
+  print(OmegaConf.to_yaml(cfg))
 
   # %%
   # !! {"metadata": {
@@ -1850,7 +1852,7 @@ def main(cfg):
   #@markdown ####**Basic Settings:**
   batch_name = cfg.batch_name #@param{type: 'string'}
   steps = cfg.steps #@param [25,50,100,150,250,500,1000]{type: 'raw', allow-input: true}
-  width_height = [cfg.width_height]#@param{type: 'raw'}
+  width_height = cfg.width_height#@param{type: 'raw'}
   clip_guidance_scale = cfg.clip_guidance_scale #@param{type: 'number'}
   tv_scale =  cfg.tv_scale#@param{type: 'number'}
   range_scale =   cfg.range_scale#@param{type: 'number'}

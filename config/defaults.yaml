@@ -29,7 +29,7 @@ range_scale: 150
 sat_scale: 0
 cutn_batches: 4
 skip_augs: False
-init_image: None
+init_image:
 init_scale: 1000
 skip_steps: 10
 animation_mode: 'None'
