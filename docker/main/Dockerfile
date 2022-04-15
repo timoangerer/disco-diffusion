@@ -23,6 +23,10 @@ WORKDIR /workspace/code
 COPY --from=modelprep /scratch/models /workspace/code/models
 COPY --from=modelprep /scratch/pretrained /workspace/code/pretrained
 
+# Precache other big files
+COPY --chown=disco --from=modelprep /scratch/clip /home/disco/.cache/clip
+COPY --chown=disco --from=modelprep /scratch/model-lpips/vgg16-397923af.pth /home/disco/.cache/torch/hub/checkpoints/vgg16-397923af.pth
+
 # Clone Git repositories
 RUN git clone https://github.com/openai/CLIP && \
     git clone https://github.com/assafshocher/ResizeRight.git && \
@@ -34,14 +38,11 @@ RUN git clone https://github.com/openai/CLIP && \
 # Install Python packages
 RUN pip install imageio imageio-ffmpeg==0.4.4 pyspng==0.1.0 lpips datetime timm ipywidgets omegaconf>=2.0.0 pytorch-lightning>=1.0.8 torch-fidelity einops wandb pandas ftfy
 RUN pip install omegaconf hydra-core
-
-# Precache other big files
-COPY --chown=disco --from=modelprep /scratch/clip /home/disco/.cache/clip
-COPY --chown=disco --from=modelprep /scratch/model-lpips/vgg16-397923af.pth /home/disco/.cache/torch/hub/checkpoints/vgg16-397923af.pth
-
-# Copy disco diffusion source code
-COPY disco.py ./
-COPY disco_xform_utils.py ./
+RUN sudo apt install s3fs
 
 # Copy default settings file
 COPY config/defaults.yaml config/
+
+# Copy disco diffusion source code
+COPY disco_xform_utils.py ./
+COPY disco.py ./
