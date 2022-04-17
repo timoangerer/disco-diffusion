@@ -1,7 +1,7 @@
 hydra:
   run:
     dir: "."
-s3_root_path: "generated-art"
+s3_root_path: "s3://generated-art"
 skip_for_run_all: True
 simple_nvidia_smi_display: False
 google_drive: True

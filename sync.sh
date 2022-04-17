@@ -8,5 +8,5 @@ inotifywait -r -m $watchDir -e create -e moved_to |
         parentDir="$(basename "$(dirname "$dir/$file")")"
         uploadPath=$s3RootPath/$parentDir/$file
         echo "Uploading to: '$uploadPath'"
-        aws s3 sync $dir s3://$uploadPath
+        aws s3 sync $dir $uploadPath
     done
