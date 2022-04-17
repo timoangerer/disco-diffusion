@@ -427,6 +427,36 @@ def main(cfg):
   outDirPath = f'{root_path}/images_out'
   createPath(outDirPath)
 
+  if (cfg.s3_root_path):
+    print(f"Found S3 root path {cfg.s3_root_path}")
+
+    # Check if S3 Bucket is accessible
+    import boto3
+    s3 = boto3.resource('s3')
+    try:
+      bucket = s3.Bucket(cfg.s3_root_path.split("/")[0])
+      bucket.creation_date # Throws excpetion when missing permissions
+    except:
+      print(f"Could not access S3 resource {cfg.s3_root_path}. Aborting generation process...")
+      raise
+
+    # Start the syncing script in the background
+    print("Starting S3 sync script")
+    import shlex
+    import subprocess
+    cmd = f"bash sync.sh {cfg.s3_root_path} {outDirPath}"
+    cmds = shlex.split(cmd)
+    syncing_process = subprocess.Popen(cmds, start_new_session=True)
+
+  import time
+  import random
+  for i in range(10):
+    time.sleep(4)
+    os.mkdir("./images_out")
+    with open(f"./images_out/randfolder-{random()}/test-{i}-{random()}.txt", "w") as file:
+      file.write(f"test-{i}-{random()}.txt")
+
+
   if is_colab:
       if google_drive and not save_models_to_google_drive or not google_drive:
           model_path = '/content/models'
@@ -614,7 +644,7 @@ def main(cfg):
       "dpt_hybrid": f"{model_path}/dpt_hybrid-midas-501f0c75.pt",
       "dpt_hybrid_nyu": f"{model_path}/dpt_hybrid_nyu-2ce69ec7.pt",}
 
-
+      
   def init_midas_depth_model(midas_model_type="dpt_large", optimize=True):
       midas_model = None
       net_w = None
@@ -688,7 +718,7 @@ def main(cfg):
       )
 
       midas_model.eval()
-      
+
       if optimize==True:
           if DEVICE == torch.device("cuda"):
               midas_model = midas_model.to(memory_format=torch.channels_last)  
@@ -855,7 +885,7 @@ def main(cfg):
           input = T.Pad(input.shape[2]//4, fill=0)(input)
           sideY, sideX = input.shape[2:4]
           max_size = min(sideX, sideY)
-
+            
           cutouts = []
           for ch in range(self.cutn):
               if ch > self.cutn - self.cutn//4:
@@ -920,7 +950,7 @@ def main(cfg):
                 T.Lambda(lambda x: x + torch.randn_like(x) * 0.01),
                 T.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.3),
             ])
-            
+                                
 
       def forward(self, input):
           cutouts = []
