@@ -451,12 +451,17 @@ def main(cfg):
   import time
   from random import random
   r1 = random()
-  randPath = f"{outDirPath}/randfolder-{r1}"
-  os.mkdir(randPath)
-  for i in range(10):
+
+  from datetime import datetime
+  now = datetime.now()
+  dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
+
+  testFolder = f"{outDirPath}/testFolder-{dt_string}"
+  os.mkdir(testFolder)
+  for i in range(2):
     time.sleep(4)
-    with open(f"{randPath}/test-{i}-{r1}.txt", "w") as file:
-      file.write(f"test-{i}-{r1}.txt")
+    with open(f"{testFolder}/test-{i}.txt", "w") as file:
+      file.write(f"hello world {i}")
 
 
   # if is_colab:
