@@ -1,0 +1,1 @@
+python gen_cli.py steps=20 n_batches=10 text_prompts='["A house, painting by ${sweep_prompt}"]' +sweep_prompt="Da Vinci","Monet" -m
