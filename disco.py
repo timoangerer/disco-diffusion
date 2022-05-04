@@ -2202,6 +2202,11 @@ def main(cfg):
       return key_frame_series
 
   def split_prompts(prompts):
+    if type(prompts) is list:
+      prompts = {0: prompts}
+    elif type(prompts) is str:
+      prompts = {0: [prompts]}
+
     prompt_series = pd.Series([np.nan for a in range(max_frames)])
     for i, prompt in prompts.items():
       prompt_series[i] = prompt
