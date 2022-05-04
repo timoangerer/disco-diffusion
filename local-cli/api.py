@@ -13,7 +13,10 @@ client = boto3.client('batch')
 import uuid
 
 def create_job(job_dto: dict):
-    job_dto["batch_name"] = f"{job_dto['batch_name']}-{uuid.uuid4()}"
+    if "batch_name" in job_dto:
+        job_dto["batch_name"] = f"{job_dto['batch_name']}-{uuid.uuid4()}"
+    else:
+        job_dto["batch_name"] = str(uuid.uuid4())
 
     print("job_dto: ", job_dto)
     

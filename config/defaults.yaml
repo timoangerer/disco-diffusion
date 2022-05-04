@@ -77,7 +77,7 @@ cut_innercut: "[4]*400+[12]*600"
 cut_ic_pow: 1
 cut_icgray_p: "[0.2]*400+[0]*600"
 display_rate: 50
-n_batches: 50
+n_batches: 10
 resume_run: False
 run_to_resume: 'latest'
 resume_from_frame: 'latest'
