@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import json
+from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -13,10 +14,12 @@ client = boto3.client('batch')
 import uuid
 
 def create_job(job_dto: dict):
+    dt_string = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    batch_name_suffix = f'{dt_string}_{str(uuid.uuid4())[:8]}'
     if "batch_name" in job_dto:
-        job_dto["batch_name"] = f"{job_dto['batch_name']}-{uuid.uuid4()}"
+        job_dto["batch_name"] = f"{job_dto['batch_name']}_{batch_name_suffix}"
     else:
-        job_dto["batch_name"] = str(uuid.uuid4())
+        job_dto["batch_name"] = batch_name_suffix
 
     print("job_dto: ", job_dto)
     
