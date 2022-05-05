@@ -148,3 +148,4 @@ cython_debug/
 local-cli/.hydra
 local-cli/multirun
 local-cli/*.log
+local-cli/scratchpad.md
